@@ -1,0 +1,12 @@
+npx lint-staged
+
+
+echo "→ Running unit tests..."
+
+if command -v pnpm >/dev/null 2>&1; then
+  pnpm test:run
+elif command -v yarn >/dev/null 2>&1; then
+  yarn test:run
+else
+  npm run test:run
+fi

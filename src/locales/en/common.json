@@ -1,0 +1,22 @@
+{
+   "brand": "Nutricia",
+   "nav": { "home": "Home", "about": "About" },
+   "home": {
+      "title": "Home Page",
+      "lead": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "buttons": {
+         "primary": "Primary",
+         "secondary": "Secondary",
+         "outline": "Outline",
+         "ghost": "Ghost",
+         "link": "Link"
+      }
+   },
+   "about": { "title": "About Page" },
+   "lang": {
+      "language": "Language",
+      "english": "English",
+      "arabic": "Arabic",
+      "change_language": "Change language"
+   }
+}

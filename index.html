@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Nutricia</title>
+      <script>
+         (() => {
+            try {
+               const stored = localStorage.getItem('theme'); // 'light' | 'dark'
+               const theme = stored === 'dark' ? 'dark' : 'light'; // default light
+               document.documentElement.classList.toggle(
+                  'dark',
+                  theme === 'dark'
+               );
+            } catch {}
+         })();
+      </script>
+      <script>
+         (() => {
+            try {
+               // 1) set theme (if you have that script already, keep it)
+               // 2) set language/dir with default 'en' (ltr)
+               const storedLocale = localStorage.getItem('locale'); // 'en' or 'ar'
+               const locale = storedLocale === 'ar' ? 'ar' : 'en';
+               const dir = locale === 'ar' ? 'rtl' : 'ltr';
+               document.documentElement.setAttribute('lang', locale);
+               document.documentElement.setAttribute('dir', dir);
+            } catch {}
+         })();
+      </script>
+   </head>
+
+   <body class="min-h-screen bg-background text-foreground">
+      <div id="root"></div>
+      <script type="module" src="/src/main.tsx"></script>
+   </body>
+</html>

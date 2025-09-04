@@ -2,45 +2,18 @@ import {
    createRootRoute,
    createRoute,
    createRouter,
-   Outlet,
-   Link,
 } from '@tanstack/react-router';
-import { useTranslation } from 'react-i18next';
 import HomePage from '@/pages/home/home';
 import AboutPage from '@/pages/about/about';
-import { ThemeToggle } from '@/components/theme-toggle/theme-toggle';
-import { LanguageSwitcher } from '@/components/language-switcher/language-switcher';
+import AuthLayout from './AuthLayout';
+import AppLayout from './AppLayout';
+import BaseLayout from './BaseLayout';
+import LoginForm from '@/components/LoginForm';
+import SignupForm from '@/components/SignupForm';
+import ForgotPasswordForm from '@/components/ForgotPasswordForm';
+import ResetPasswordForm from '@/components/ResetPasswordForm';
 
-function Layout() {
-   const { t } = useTranslation();
-
-   return (
-      <div className="min-h-screen">
-         <header className="border-b">
-            <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-               <Link to="/" className="text-lg font-semibold">
-                  {t('brand')}
-               </Link>
-               <nav className="flex items-center justify-center gap-4 text-sm">
-                  <Link to="/" className="[&.active]:font-semibold">
-                     {t('nav.home')}
-                  </Link>
-                  <Link to="/about" className="[&.active]:font-semibold">
-                     {t('nav.about')}
-                  </Link>
-                  <LanguageSwitcher />
-                  <ThemeToggle />
-               </nav>
-            </div>
-         </header>
-         <main className="mx-auto max-w-7xl px-4 py-8">
-            <Outlet />
-         </main>
-      </div>
-   );
-}
-
-const rootRoute = createRootRoute({ component: Layout });
+const rootRoute = createRootRoute({ component: BaseLayout });
 const indexRoute = createRoute({
    getParentRoute: () => rootRoute,
    path: '/',
@@ -52,12 +25,50 @@ const aboutRoute = createRoute({
    component: AboutPage,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, aboutRoute]);
+const loginRoute = createRoute({
+   getParentRoute: () => rootRoute,
+   path: '/auth/login',
+   component: () => <AuthLayout FormComponent={LoginForm} />,
+});
+
+const signupRoute = createRoute({
+   getParentRoute: () => rootRoute,
+   path: '/auth/signup',
+   component: () => <AuthLayout FormComponent={SignupForm} />,
+});
+
+const forgotPasswordRoute = createRoute({
+   getParentRoute: () => rootRoute,
+   path: '/auth/forgot-password',
+   component: () => <AuthLayout FormComponent={ForgotPasswordForm} />,
+});
+
+const resetPasswordRoute = createRoute({
+   getParentRoute: () => rootRoute,
+   path: '/auth/reset-password',
+   component: () => <AuthLayout FormComponent={ResetPasswordForm} />,
+});
+
+const appRoute = createRoute({
+   getParentRoute: () => rootRoute,
+   path: '/app',
+   component: AppLayout,
+});
+
+const routeTree = rootRoute.addChildren([
+   indexRoute,
+   aboutRoute,
+   loginRoute,
+   signupRoute,
+   forgotPasswordRoute,
+   resetPasswordRoute,
+   appRoute,
+]);
 
 export const router = createRouter({ routeTree });
 
-declare module '@tanstack/react-router' {
-   interface Register {
-      router: typeof router;
-   }
-}
+// declare module '@tanstack/react-router' {
+//    interface Register {
+//       router: typeof router;
+//    }
+// }

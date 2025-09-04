@@ -2,57 +2,54 @@ import {
    createRootRoute,
    createRoute,
    createRouter,
-   Outlet,
-   Link,
+   redirect,
 } from '@tanstack/react-router';
-import { useTranslation } from 'react-i18next';
 import HomePage from '@/pages/home/home';
 import AboutPage from '@/pages/about/about';
-import { ThemeToggle } from '@/components/theme-toggle/theme-toggle';
-import { LanguageSwitcher } from '@/components/language-switcher/language-switcher';
+import TestPage from '@/pages/test/TestPage';
+import GuestLayout from '@/layouts/guest.layout';
+import TestLayout from '@/layouts/TestLayout';
+import BaseLayout from '@/layouts/base.layout';
+import MainContent from '@/layouts/MainContent';
+import AppLayout from '@/layouts/app.layout';
 
-function Layout() {
-   const { t } = useTranslation();
+// for index route bind the base layout
+const rootRoute = createRootRoute({
+   component: BaseLayout,
+});
 
-   return (
-      <div className="min-h-screen">
-         <header className="border-b">
-            <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-               <Link to="/" className="text-lg font-semibold">
-                  {t('brand')}
-               </Link>
-               <nav className="flex items-center justify-center gap-4 text-sm">
-                  <Link to="/" className="[&.active]:font-semibold">
-                     {t('nav.home')}
-                  </Link>
-                  <Link to="/about" className="[&.active]:font-semibold">
-                     {t('nav.about')}
-                  </Link>
-                  <LanguageSwitcher />
-                  <ThemeToggle />
-               </nav>
-            </div>
-         </header>
-         <main className="mx-auto max-w-7xl px-4 py-8">
-            <Outlet />
-         </main>
-      </div>
-   );
-}
-
-const rootRoute = createRootRoute({ component: Layout });
 const indexRoute = createRoute({
    getParentRoute: () => rootRoute,
    path: '/',
-   component: HomePage,
+   loader: () => {
+      throw redirect({ to: '/home' });
+   },
 });
+
+const homeRoute = createRoute({
+   getParentRoute: () => rootRoute,
+   path: '/home',
+   component: AppLayout,
+});
+
 const aboutRoute = createRoute({
    getParentRoute: () => rootRoute,
    path: '/about',
    component: AboutPage,
 });
 
-const routeTree = rootRoute.addChildren([indexRoute, aboutRoute]);
+const testRoute = createRoute({
+   getParentRoute: () => rootRoute,
+   path: '/test1',
+   component: () => <TestLayout></TestLayout>,
+});
+
+const routeTree = rootRoute.addChildren([
+   indexRoute,
+   homeRoute,
+   aboutRoute,
+   testRoute,
+]);
 
 export const router = createRouter({ routeTree });
 
